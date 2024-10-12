@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { Details } from "../Details/Details";
+import { API_URLS } from "../../api";
 
-export default function UsersList() {
+export default function List() {
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState({});
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('https://raw.githubusercontent.com/netology-code/ra16-homeworks/master/hooks-context/use-effect/data/users.json');
+        const response = await fetch(API_URLS.users);
         if (!response.ok) {
           throw new Error(response.statusText)
         }
@@ -29,10 +30,12 @@ export default function UsersList() {
           <div 
             key={user.id} 
             className="list-item"
-            onClick={() => setSelectedUser(user)}>{user.name}</div>
+            onClick={() => setSelectedUser(user.id)}>
+            {user.name}
+          </div>
         ))}      
       </div>
-      {selectedUser && <Details user={selectedUser} />}
+      {selectedUser && <Details userId={selectedUser} />}
     </div>
 
   );
